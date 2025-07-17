@@ -1,39 +1,26 @@
-// send-message.js
+require("dotenv").config(); // Cargar variables del archivo .env
 
-const twilio = require('twilio');
-
-// Reemplaza con tus credenciales reales (las encuentras en https://www.twilio.com/console)
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const fromWhatsApp = process.env.TWILIO_WHATSAPP_NUMBER;
+const toWhatsApp = process.env.TO_NUMBER;
 
-const client = new twilio(accountSid, authToken);
-
-// Reemplaza con tu número Sandbox (remitente) y tu número de WhatsApp (destinatario)
-const from = 'whatsapp:+14155238886';
-const to = 'whatsapp:+573115807057'; // Tu número en formato internacional
-
-const mensaje = `
-🌟 ¡Tu voz importa!
-
-Únete a nuestra campaña por un cambio real. 
-Con tu apoyo, podemos construir un mejor futuro para todos.
-
-✅ Comparte
-✅ Participa
-✅ Sé parte del cambio
-
-#TuVozCuenta
-`;
+const client = require("twilio")(accountSid, authToken);
 
 client.messages
   .create({
-    from,
-    to,
-    body: mensaje,
+    from: fromWhatsApp,
+    to: toWhatsApp,
+    body: `¡Hey! 👋 Bienvenid@ al movimiento que está dando de qué hablar 💥
+Soy Samuel Romero, y si estás aquí es porque te interesa transformar este país desde la cultura, la innovación y la tecnología.
+
+¿Te gustaría sumarte a esta red de jóvenes que quieren cambiar el juego? 🎮🔥
+
+👉🏼 ¿Aceptas que te haga unas preguntas rápidas para conectarte a nuestra red? 
+
+👉 Responde: *Sí* o *No*
+
+(Nuestra política de protección de datos cumple con la ley 1581: https://bit.ly/PoliticaDeDatosSamuelRomero)`,
   })
-  .then(message => {
-    console.log('Mensaje enviado con SID:', message.sid);
-  })
-  .catch(error => {
-    console.error('Error al enviar el mensaje:', error);
-  });
+  .then((message) => console.log("✅ Mensaje enviado:", message.sid))
+  .catch((err) => console.error("❌ Error al enviar:", err));
